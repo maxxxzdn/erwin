@@ -8,7 +8,7 @@
 
 <b> Authors: </b> <a href="https://maxxxzdn.github.io/">Maksim Zhdanov</a>, Max Welling, Jan-Willem van de Meent
 
-[ArXiv](https://arxiv.org/abs/2502.17019) | Blog soon | [Example](https://github.com/maxxxzdn/erwin?tab=readme-ov-file#using-erwin)
+[ArXiv](https://arxiv.org/abs/2502.17019) | [Blog](https://maxxxzdn.github.io/blog/erwin/) | [Example](https://github.com/maxxxzdn/erwin?tab=readme-ov-file#using-erwin)
 
 </div>
 
@@ -74,7 +74,7 @@ Erwin expects as inputs:
 
 ```python
 import torch
-from models import ErwinTransformer
+from models import ErwinFlashTransformer
 
 config = {
     'c_in': 32,
@@ -90,7 +90,7 @@ config = {
     'rotate': 0, # disable cross-ball interaction
 }
 
-model = ErwinTransformer(**config).cuda()
+model = ErwinFlashTransformer(**config).cuda()
 
 bs = 16
 num_points = 2048
