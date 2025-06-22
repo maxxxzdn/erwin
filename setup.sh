@@ -22,6 +22,7 @@ if [ "$MINIMAL" = true ]; then
     uv pip install einops
     uv pip install Cython
     uv pip install setuptools
+    uv pip install flash-attn
 else
     echo "Installing all dependencies [Erwin + baselines + experiments]"
 
@@ -32,6 +33,7 @@ else
     uv pip install einops
     uv pip install Cython
     uv pip install setuptools
+    uv pip install flash-attn
 
     # PointTransformer v3 dependencies
     uv pip install addict
