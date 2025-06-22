@@ -1,13 +1,16 @@
 """
 This module provides the following components:
 - Erwin: Base model implementation
-- ErwinFlash: Memory-efficient model with FlashAttention and optimzed operations
+- ErwinFlash: Memory-efficient model with FlashAttention and optimized operations
 """
 
-from .erwin import ErwinTransformer
-from .erwin_flash import ErwinTransformer as ErwinFlashTransformer
+try:
+    import flash_attn
+    from .erwin_flash import ErwinTransformer
+except ImportError:
+    print("FlashAttention is not installed. Using the standard ErwinTransformer.")
+    from .erwin import ErwinTransformer
 
 __all__ = [
     "ErwinTransformer",
-    "ErwinFlashTransformer",
 ]

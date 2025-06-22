@@ -10,19 +10,28 @@ uv venv erwin --python 3.9
 source erwin/bin/activate
 
 MINIMAL=false
+W_FLASH_ATTN=false
+
 if [[ "$*" == *"--minimal"* ]]; then
     MINIMAL=true
 fi
 
+if [[ "$*" == *"--with-flash-attn"* ]]; then
+    W_FLASH_ATTN=true
+fi
+
 if [ "$MINIMAL" = true ]; then
     echo "Installing minimal dependencies [Erwin]"
-    uv pip install torch==2.5.0 
+    uv pip install torch=2.5.0 
     uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.5.0+cu124.html # CUDA 12.4
     uv pip install numpy 
     uv pip install einops
-    uv pip install Cython
-    uv pip install setuptools
-    uv pip install flash-attn
+    
+    if [ "$W_FLASH_ATTN" = true ]; then
+        uv pip install flash-attn
+    fi
+    
+    uv pip install balltree-erwin
 else
     echo "Installing all dependencies [Erwin + baselines + experiments]"
 
@@ -31,9 +40,12 @@ else
     uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.5.0+cu124.html # CUDA 12.4
     uv pip install numpy 
     uv pip install einops
-    uv pip install Cython
-    uv pip install setuptools
-    uv pip install flash-attn
+    
+    if [ "$W_FLASH_ATTN" = true ]; then
+        uv pip install flash-attn
+    fi
+    
+    uv pip install balltree-erwin
 
     # PointTransformer v3 dependencies
     uv pip install addict
@@ -53,9 +65,3 @@ else
     uv pip install tqdm
     uv pip install matplotlib
 fi
-
-# install c++ balltree implementation
-cd balltree
-uv pip install . --no-build-isolation
-
-cd ..

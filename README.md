@@ -74,7 +74,7 @@ Erwin expects as inputs:
 
 ```python
 import torch
-from models import ErwinFlashTransformer
+from models import ErwinTransformer
 
 config = {
     'c_in': 32,
@@ -90,7 +90,7 @@ config = {
     'rotate': 0, # disable cross-ball interaction
 }
 
-model = ErwinFlashTransformer(**config).cuda()
+model = ErwinTransformer(**config).cuda()
 
 bs = 16
 num_points = 2048
@@ -118,7 +118,7 @@ Erwin has a minimal number of dependencies:
 - PyTorch (version 2.5.0, CUDA 12.4)
 - NumPy
 - einops
-- Cython
+- balltree-erwin
 - torch-cluster (optional, is used to build a graph in the Embedding module)
 
 A virtual environment named `erwin` can be created using `uv`
@@ -130,6 +130,11 @@ bash setup.sh
 If you only want to play with Erwin and don't want to install additional dependencies (tensorflow, spconv, etc.) use
 ```
 bash setup.sh --minimal
+```
+
+To improve the scalability of Erwin, install it with Flash Attention:
+```
+bash setup.sh --with-flash-attn --minimal
 ```
 
 to install `uv` run:
