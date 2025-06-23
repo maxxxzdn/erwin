@@ -22,7 +22,7 @@ fi
 
 if [ "$MINIMAL" = true ]; then
     echo "Installing minimal dependencies [Erwin]"
-    uv pip install torch=2.5.0 
+    uv pip install torch==2.5.0
     uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.5.0+cu124.html # CUDA 12.4
     uv pip install numpy 
     uv pip install einops
@@ -36,7 +36,7 @@ else
     echo "Installing all dependencies [Erwin + baselines + experiments]"
 
     # Erwin dependencies
-    uv pip install torch==2.5.0 # 2.5 required for torch-scatter, can be ommited for Erwin
+    uv pip install torch==2.5.0
     uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.5.0+cu124.html # CUDA 12.4
     uv pip install numpy 
     uv pip install einops
