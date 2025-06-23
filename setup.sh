@@ -6,6 +6,8 @@
 # for MacOS users:
 # brew install libomp
 
+set -e
+
 uv venv erwin --python 3.9
 source erwin/bin/activate
 
