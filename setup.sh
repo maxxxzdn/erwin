@@ -8,19 +8,44 @@
 
 set -e
 
-uv venv erwin --python 3.9
-source erwin/bin/activate
-
 MINIMAL=false
 W_FLASH_ATTN=false
+VENV_PATH="./erwin"
+PYTHON_BIN_PATH=$(which python)
 
-if [[ "$*" == *"--minimal"* ]]; then
-    MINIMAL=true
-fi
 
-if [[ "$*" == *"--with-flash-attn"* ]]; then
-    W_FLASH_ATTN=true
-fi
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --minimal)
+            MINIMAL=true
+            shift
+            ;;
+        --with-flash-attn)
+            W_FLASH_ATTN=true
+            shift
+            ;;
+        --venv)
+            VENV_PATH="$2"
+            shift 2
+            ;;
+        --python)
+            PYTHON_BIN_PATH="$2"
+            shift 2
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--venv VENV_PATH] [--minimal]"
+            exit 1
+            ;;
+    esac
+done
+
+
+# create and check in the target python virtual environment
+uv venv "${VENV_PATH}" --python "${PYTHON_BIN_PATH}"
+source "${VENV_PATH}/bin/activate"
+
 
 if [ "$MINIMAL" = true ]; then
     echo "Installing minimal dependencies [Erwin]"
