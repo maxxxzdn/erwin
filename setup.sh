@@ -9,8 +9,8 @@
 uv venv erwin --python 3.9
 source erwin/bin/activate
 
-MINIMAL=false
-W_FLASH_ATTN=false
+MINIMAL=true
+W_FLASH_ATTN=true
 
 if [[ "$*" == *"--minimal"* ]]; then
     MINIMAL=true
@@ -22,13 +22,13 @@ fi
 
 if [ "$MINIMAL" = true ]; then
     echo "Installing minimal dependencies [Erwin]"
-    uv pip install torch==2.5.0
-    uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.5.0+cu124.html # CUDA 12.4
-    uv pip install numpy 
-    uv pip install einops
+    uv pip install torch==2.6.0
+    uv pip install torch-cluster -f https://data.pyg.org/whl/torch-2.6.0+cu124.html # CUDA 12.4
+    uv pip install torch-scatter -f https://data.pyg.org/whl/torch-2.6.0+cu124.html # CUDA 12.4
+    uv pip install numpy einops setuptools
     
     if [ "$W_FLASH_ATTN" = true ]; then
-        uv pip install flash-attn
+        uv pip install flash-attn==2.7.4.post1 --no-build-isolation
     fi
     
     uv pip install balltree-erwin

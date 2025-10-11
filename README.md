@@ -75,6 +75,7 @@ Erwin expects as inputs:
 ```python
 import torch
 from models import ErwinTransformer
+from models.erwin_flash import prepare_tree
 
 config = {
     'c_in': 32,
@@ -87,20 +88,31 @@ config = {
     'ball_sizes': [128, 128, 128, 128, 128],
     'dimensionality': 3, # 3D space
     'mlp_ratio': 4,
+    'mp_steps': 0, # disable message passing
     'rotate': 0, # disable cross-ball interaction
 }
 
 model = ErwinTransformer(**config).cuda()
 
-bs = 16
-num_points = 2048
+bs = 4
+num_points = 65536
 
-node_features = torch.randn(num_points * bs, 32).cuda()
-node_positions = torch.rand(num_points * bs, 3).cuda()
+node_features = torch.randn(num_points * bs, config['c_in']).cuda()
+node_positions = torch.rand(num_points * bs, config['dimensionality']).cuda()
 batch_idx = torch.repeat_interleave(torch.arange(bs), num_points).cuda()
-radius = 0.05 # build radius connectivity if not given otherwise
 
-out = model(node_features, node_positions, batch_idx, radius=radius)
+tree_idx, tree_mask, tree_idx_rot, tree_bwd_idx = prepare_tree(
+    node_positions, batch_idx, 
+    config['strides'], config['ball_sizes'], config['rotate']
+)
+
+model = torch.compile(model)
+
+with torch.amp.autocast('cuda', dtype=torch.bfloat16):
+    out = model(
+        node_features, node_positions, batch_idx, 
+        tree_idx=tree_idx, tree_mask=tree_mask, tree_idx_rot=tree_idx_rot, tree_bwd_idx=tree_bwd_idx
+    )
 ```
 
 ### Erwin is fast

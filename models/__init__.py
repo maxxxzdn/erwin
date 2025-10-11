@@ -6,10 +6,15 @@ This module provides the following components:
 
 try:
     import flash_attn
-    from .erwin_flash import ErwinTransformer
+    flash_attn_available = True
 except ImportError:
     print("FlashAttention is not installed. Using the standard ErwinTransformer.")
-    from .erwin import ErwinTransformer
+    flash_attn_available = False
+
+if not flash_attn_available:
+    from models.erwin import ErwinTransformer
+else:
+    from models.erwin_flash import ErwinTransformer
 
 __all__ = [
     "ErwinTransformer",
